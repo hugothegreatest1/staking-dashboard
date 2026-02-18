@@ -1,0 +1,10 @@
+{
+    "providerId": 4,
+    "providerName": "node101",
+    "providerDescription": "We are a validator on various projects within the Cosmos ecosystem and are passionate about supporting developers in the blockchain space.",
+    "providerEmail": "hello@node101.io",
+    "providerWebsite": "https://node101.io",
+    "providerLogoUrl": "https://keybase.io/indie_validators/picture",
+    "discordUsername": "yakupnode101.io",
+    "providerSelfStake": ["0x43B1628E4f551103779774Ae9EE4c24a71a79b7F"]
+}

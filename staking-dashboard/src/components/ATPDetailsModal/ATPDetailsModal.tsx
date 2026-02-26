@@ -7,6 +7,7 @@ import { useRollupData } from "@/hooks/rollup/useRollupData"
 import { useStakingAssetTokenDetails } from "@/hooks/stakingRegistry"
 import { useATP } from "@/hooks/useATP"
 import { useUserGovernancePower, usePendingWithdrawals } from "@/hooks/governance"
+import { useBlockTimestamp } from "@/hooks/useBlockTimestamp"
 import { formatTokenAmount } from "@/utils/atpFormatters"
 import { Icon } from "@/components/Icon"
 import { ATPDetailsHeader } from "./ATPDetailsHeader"
@@ -22,6 +23,7 @@ import { ClaimAllProvider } from "@/contexts/ClaimAllContext"
 import { ClaimAllDelegationRewardsButton } from "@/components/ClaimAllDelegationRewardsButton"
 import { ClaimDelegationRewardsModal, type DelegationModalData } from "@/components/ClaimDelegationRewardsModal"
 import type { ATPData } from "@/hooks/atp"
+import { isMATPData } from "@/hooks/atp/matp/matpTypes"
 import type { Address } from "viem"
 
 interface ATPDetailsModalProps {
@@ -124,6 +126,7 @@ export const ATPDetailsModal = ({ atp, isOpen, onClose, onWithdrawSuccess, onRef
   const { votingPower: governanceVotingPower, refetch: refetchGovernancePower } = useUserGovernancePower({
     stakerAddress: atp.staker
   })
+  const { blockTimestamp } = useBlockTimestamp()
 
   // Get pending governance withdrawals for this ATP (initiated but not yet finalized)
   const { pendingWithdrawals: governancePendingWithdrawals, refetch: refetchGovernancePendingWithdrawals } = usePendingWithdrawals({
@@ -263,6 +266,11 @@ export const ATPDetailsModal = ({ atp, isOpen, onClose, onWithdrawSuccess, onRef
 
   const { messages: alertMessages, type: alertType } = alertData
 
+  // Extract ATP context for milestone validation
+  const atpType = atp.typeString; // "MATP", "LATP", "NCATP"
+  const registryAddress = atp.registry as Address;
+  const milestoneId = isMATPData(atp) ? atp.milestoneId : undefined;
+
   return createPortal(
     <ClaimAllProvider>
       <div
@@ -315,6 +323,7 @@ export const ATPDetailsModal = ({ atp, isOpen, onClose, onWithdrawSuccess, onRef
                   globalLock={atp.globalLock}
                   atpType={atp.typeString}
                   registryAddress={atp.registry}
+                  blockTimestamp={blockTimestamp}
                 />
               </div>
             )}
@@ -368,6 +377,9 @@ export const ATPDetailsModal = ({ atp, isOpen, onClose, onWithdrawSuccess, onRef
                         rollupVersion={rollupVersion}
                         atp={atp}
                         onWithdrawSuccess={handleWithdrawSuccess}
+                        atpType={atpType}
+                        registryAddress={registryAddress}
+                        milestoneId={milestoneId}
                       />
                     ))}
                   </div>
@@ -458,6 +470,9 @@ export const ATPDetailsModal = ({ atp, isOpen, onClose, onWithdrawSuccess, onRef
                         rollupVersion={rollupVersion}
                         onClaimClick={handleDelegationClaimClick}
                         onWithdrawSuccess={handleWithdrawSuccess}
+                        atpType={atpType}
+                        registryAddress={registryAddress}
+                        milestoneId={milestoneId}
                       />
                     ))}
                   </div>

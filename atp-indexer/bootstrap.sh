@@ -74,6 +74,10 @@ get_contract_addresses() {
     ATP_REGISTRY_AUCTION_ADDRESS=$(cat $contract_addresses_file | jq -r '.atpRegistryAuction')
     ATP_FACTORY_AUCTION_ADDRESS=$(cat $contract_addresses_file | jq -r '.atpFactoryAuction')
 
+    # new factories
+    ATP_FACTORY_MATP_ADDRESS=$(cat $contract_addresses_file | jq -r '.atpFactoryMatp')
+    ATP_FACTORY_LATP_ADDRESS=$(cat $contract_addresses_file | jq -r '.atpFactoryLatp')
+
     # other
     STAKING_REGISTRY_ADDRESS=$(cat $contract_addresses_file | jq -r '.stakingRegistry')
     ROLLUP_ADDRESS=$(cat $contract_addresses_file | jq -r '.rollupAddress')
@@ -150,6 +154,8 @@ CHAIN_ID=${CHAIN_ID}
 # Contract addresses
 ATP_FACTORY_ADDRESS=${ATP_FACTORY_ADDRESS}
 ATP_FACTORY_AUCTION_ADDRESS=${ATP_FACTORY_AUCTION_ADDRESS}
+ATP_FACTORY_MATP_ADDRESS=${ATP_FACTORY_MATP_ADDRESS}
+ATP_FACTORY_LATP_ADDRESS=${ATP_FACTORY_LATP_ADDRESS}
 STAKING_REGISTRY_ADDRESS=${STAKING_REGISTRY_ADDRESS}
 ROLLUP_ADDRESS=${ROLLUP_ADDRESS}
 
@@ -187,6 +193,8 @@ CHAIN_ID=${CHAIN_ID}
 # Contract addresses
 ATP_FACTORY_ADDRESS=${ATP_FACTORY_ADDRESS}
 ATP_FACTORY_AUCTION_ADDRESS=${ATP_FACTORY_AUCTION_ADDRESS}
+ATP_FACTORY_MATP_ADDRESS=${ATP_FACTORY_MATP_ADDRESS}
+ATP_FACTORY_LATP_ADDRESS=${ATP_FACTORY_LATP_ADDRESS}
 STAKING_REGISTRY_ADDRESS=${STAKING_REGISTRY_ADDRESS}
 ROLLUP_ADDRESS=${ROLLUP_ADDRESS}
 
@@ -361,6 +369,8 @@ function deploy() {
   local args="-var=rpc_url=$RPC_URL \
     -var=atp_factory_address=$ATP_FACTORY_ADDRESS \
     -var=atp_factory_auction_address=$ATP_FACTORY_AUCTION_ADDRESS \
+    -var=atp_factory_matp_address=$ATP_FACTORY_MATP_ADDRESS \
+    -var=atp_factory_latp_address=$ATP_FACTORY_LATP_ADDRESS \
     -var=staking_registry_address=$STAKING_REGISTRY_ADDRESS \
     -var=rollup_address=$ROLLUP_ADDRESS \
     -var=start_block=$START_BLOCK \
@@ -469,6 +479,7 @@ case $ACTION in
       echo ""
     echo "  Required contract address variables:"
     echo "    ATP_FACTORY_ADDRESS, ATP_FACTORY_AUCTION_ADDRESS"
+    echo "    ATP_FACTORY_MATP_ADDRESS, ATP_FACTORY_LATP_ADDRESS"
     echo "    ATP_REGISTRY_ADDRESS, ATP_REGISTRY_AUCTION_ADDRESS"
     echo "    STAKING_REGISTRY_ADDRESS, ROLLUP_ADDRESS"
     echo "    START_BLOCK (optional, defaults to 0)"
